@@ -1,0 +1,48 @@
+/* Teaser block – NICE brand */
+
+main .teaser {
+  background: light-dark(var(--color-light), var(--color-card-dark));
+  border: var(--border-heritage);
+  border-radius: var(--border-radius-heritage);
+  text-align: center;
+  font-family: var(--font-family);
+  font-size: var(--body-font-size-m);
+  font-weight: 500;
+  color: light-dark(var(--color-ink), var(--color-light));
+  transition: transform 0.5s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)),
+    box-shadow 0.5s ease,
+    border-color 0.4s ease;
+}
+
+main .teaser:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lift-m);
+  border-color: light-dark(var(--color-nice-mid-blue), rgb(81 146 244 / 40%));
+}
+
+main .teaser > div {
+  align-items: center;
+  gap: var(--space-s);
+  padding: var(--space-l) var(--content-padding-inline);
+}
+
+main .teaser > div > div a {
+  color: light-dark(var(--color-nice-electric), var(--color-nice-mid-blue));
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: var(--color-nice-mid-blue);
+  padding-inline-start: 0.5em;
+  transition: color 0.3s, text-decoration-color 0.3s;
+}
+
+main .teaser > div > div a:hover {
+  color: var(--color-nice-mid-blue);
+  text-decoration-color: var(--color-nice-mid-blue);
+}
+
+@media (width >= 900px) {
+  main .teaser > div {
+    padding: var(--space-xl) var(--space-2xl, 48px);
+  }
+}

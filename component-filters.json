@@ -1,0 +1,68 @@
+[
+  {
+    "id": "main",
+    "components": [
+      "section"
+    ]
+  },
+  {
+    "id": "section",
+    "components": [
+      "auth-toggle",
+      "cards",
+      "columns",
+      "embed",
+      "faq",
+      "form",
+      "fragment",
+      "hero",
+      "image",
+      "journey-map",
+      "n8n-form",
+      "product-grid",
+      "quiz",
+      "related-articles",
+      "search",
+      "social-share",
+      "table",
+      "tabs",
+      "teaser",
+      "text"
+    ]
+  },
+  {
+    "id": "cards",
+    "components": [
+      "cards-item"
+    ]
+  },
+  {
+    "id": "columns",
+    "components": [
+      "columns-row"
+    ]
+  },
+  {
+    "id": "columns-row",
+    "components": []
+  },
+  {
+    "id": "columns-cell",
+    "components": [
+      "text",
+      "image"
+    ]
+  },
+  {
+    "id": "faq",
+    "components": [
+      "faq-item"
+    ]
+  },
+  {
+    "id": "journey-map",
+    "components": [
+      "journey-map-step"
+    ]
+  }
+]

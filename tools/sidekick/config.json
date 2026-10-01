@@ -1,0 +1,14 @@
+{
+  "project": "DIYFire",
+  "editUrlPattern": "https://da.live/canvas#/scdemos/demo",
+  "plugins": [
+    {
+      "id": "experimentation",
+      "titleI18n": {
+        "en": "Experimentation"
+      },
+      "environments": ["dev", "preview"],
+      "event": "experimentation"
+    }
+  ]
+}

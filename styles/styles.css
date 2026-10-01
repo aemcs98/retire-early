@@ -1,0 +1,744 @@
+/*
+ * Copyright 2020 Adobe. All rights reserved.
+ * This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. You may obtain a copy
+ * of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ * OF ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
+/* ==========================================================================
+   Design tokens – use these variables across blocks for consistent styling.
+   ========================================================================== */
+
+:root,
+:host {
+  /* mobile-first breakpoints */
+  --bp-tablet: 600px;
+  --bp-desktop: 900px;
+  --bp-wide: 1200px;
+
+  /* grid */
+  --grid-container-width: 83.4%;
+  --grid-column-width: calc(var(--grid-container-width) / 12);
+  --grid-gutter-width: 8.3%;
+
+  /* spacing scale for consistent global layout */
+  --space-xs: 4px;
+  --space-s: 8px;
+  --space-m: 16px;
+  --space-l: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+
+  /* global layout rhythm */
+  --content-padding-inline: var(--space-m);
+  --main-block-space: var(--space-l);
+  --section-block-space: var(--space-l);
+
+  /* color scheme */
+  color-scheme: light dark;
+
+  /* Paylocity brand palette */
+  --color-orange: #ed5807;
+  --color-red: #ed2024;
+  --color-graphite: rgb(50 62 72);
+  --color-cream: rgb(243 240 235);
+  --color-white: #fff;
+  --color-linen: #f9f7f4;
+
+  /* Paylocity dark palette */
+  --color-graphite-dark: #253342;
+  --color-graphite-light: #4f5659;
+  --color-muted: #8b9a9a;
+
+  /* color tokens – grays and palette */
+  --color-gray-100: #f1f1f1;
+  --color-gray-200: #d3d3d3;
+  --color-gray-300: #b5b5b5;
+  --color-gray-400: #999;
+  --color-gray-500: #7d7d7d;
+  --color-gray-600: #636363;
+  --color-gray-700: #494949;
+  --color-gray-800: #313131;
+  --color-gray-900: #1b1b1b;
+  --color-green-100: #e1f5e3;
+  --color-green-200: #a3e1a8;
+  --color-green-300: #60cb6a;
+  --color-green-400: #24b032;
+  --color-green-500: #1e9029;
+  --color-green-600: #187220;
+  --color-teal-100: #e4f3f5;
+  --color-teal-200: #acdbdf;
+  --color-teal-300: #71c1c9;
+  --color-teal-400: #36a7b3;
+  --color-teal-500: #108a96;
+  --color-blue-100: #eaf2ff;
+  --color-blue-200: #b9d4ff;
+  --color-blue-300: #88b6ff;
+  --color-blue-400: #5898ff;
+  --color-blue-500: #2176ff;
+  --color-blue-600: #0058e4;
+  --color-blue-700: #0041a9;
+  --color-purple-100: #f4edfb;
+  --color-purple-200: #dfcbf2;
+  --color-purple-300: #c9a7ea;
+  --color-purple-400: #b385e1;
+  --color-purple-500: #9d60d8;
+  --color-purple-600: #843ccb;
+  --color-red-100: #ffecea;
+  --color-red-200: #ffc4be;
+  --color-red-300: #ff9990;
+  --color-red-400: #ff6759;
+  --color-red-500: #f81400;
+  --color-red-600: #c71000;
+  --color-orange-100: #ffeddc;
+  --color-orange-200: #ffc895;
+  --color-orange-300: #ff9e43;
+  --color-orange-400: #f37500;
+  --color-orange-500: #c76000;
+  --color-yellow-100: #fff48e;
+  --color-yellow-200: #ebd400;
+  --color-yellow-300: #cab600;
+
+  /* semantic / named colors */
+  --color-light: var(--color-white);
+  --color-dark: var(--color-graphite);
+  --color-text: var(--color-graphite);
+  --color-link: var(--color-graphite);
+  --color-link-hover: var(--color-orange);
+  --color-brand: var(--color-red);
+  --color-accent: var(--color-orange);
+  --color-shaded: var(--color-cream);
+
+  /* fonts */
+  --font-family: sofia-pro, "Trebuchet MS", sans-serif;
+  --font-family-serif: sofia-pro, georgia, serif;
+  --font-family-mono: "JetBrains Mono", "Courier New", monospace;
+  --body-font-family: var(--font-family);
+  --heading-font-family: var(--font-family);
+
+  /* heading sizes */
+  --heading-font-size-xxl: 36px;
+  --heading-font-size-xl: 28px;
+  --heading-font-size-l: 24px;
+  --heading-font-size-m: 20px;
+  --heading-font-size-s: 18px;
+  --heading-font-size-xs: 16px;
+  --heading-line-height: 1.2;
+
+  /* body sizes */
+  --body-font-size-xxxl: 25px;
+  --body-font-size-xxl: 22px;
+  --body-font-size-xl: 20px;
+  --body-font-size-l: 18px;
+  --body-font-size-m: 16px;
+  --body-font-size-s: 14px;
+  --body-font-size-xs: 12px;
+  --body-line-height: 1.6;
+
+  /* nav / layout */
+  --nav-height: 64px;
+  --header-height: var(--nav-height);
+
+  /* boilerplate compatibility – map to design tokens */
+  --background-color: var(--color-white);
+  --light-color: var(--color-shaded);
+  --dark-color: var(--color-graphite);
+  --text-color: var(--color-text);
+  --link-color: var(--color-link);
+  --link-hover-color: var(--color-link-hover);
+
+  /* border tokens */
+  --border-radius-pill: 30px;
+  --border-radius-card: 16px;
+  --border-radius-sm: 8px;
+
+  /* shadow tokens */
+  --shadow-sm: 0 2px 8px rgb(0 0 0 / 8%);
+  --shadow-md: 0 4px 16px rgb(0 0 0 / 10%);
+  --shadow-lg: 0 8px 32px rgb(0 0 0 / 12%);
+
+  /* easing presets */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-base: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+:root[data-theme='light'],
+:host([data-theme='light']) {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'],
+:host([data-theme='dark']) {
+  color-scheme: dark;
+}
+
+@media (width >= 600px) {
+  :root,
+  :host {
+    --content-padding-inline: var(--space-l);
+    --main-block-space: var(--space-xl);
+    --section-block-space: var(--space-xl);
+  }
+}
+
+@media (width >= 900px) {
+  :root,
+  :host {
+    --body-font-size-m: 16px;
+    --body-font-size-s: 14px;
+    --body-font-size-xs: 12px;
+    --heading-font-size-xxl: 60px;
+    --heading-font-size-xl: 36px;
+    --heading-font-size-l: 28px;
+    --heading-font-size-m: 24px;
+    --heading-font-size-s: 20px;
+    --heading-font-size-xs: 18px;
+    --content-padding-inline: var(--space-xl);
+    --section-block-space: var(--space-3xl);
+  }
+}
+
+@media (width >= 1200px) {
+  :root,
+  :host {
+    --grid-container-width: 1200px;
+  }
+}
+
+/* optional scheme classes for forced light/dark */
+.light-scheme {
+  color-scheme: light;
+}
+
+.dark-scheme {
+  color-scheme: dark;
+}
+
+/* theme aliases from page metadata (theme: dark / light) */
+body.light,
+body.theme-light {
+  color-scheme: light;
+}
+
+body.dark,
+body.theme-dark {
+  color-scheme: dark;
+}
+
+/* fallback fonts */
+@font-face {
+  font-family: sofia-pro-fallback;
+  size-adjust: 100%;
+  src: local('Arial');
+}
+
+/* ==========================================================================
+   Base layout and LCP-critical styles (boilerplate structure preserved)
+   ========================================================================== */
+
+html {
+  min-height: 100%;
+  scroll-padding-top: calc(var(--nav-height) + 1rem);
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: rgb(237 88 7 / 20%);
+  color: inherit;
+}
+
+body {
+  display: none;
+  margin: 0;
+  box-sizing: border-box;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m);
+  line-height: var(--body-line-height);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root body {
+  min-height: 100vh;
+}
+
+body.appear {
+  display: block;
+}
+
+header {
+  height: var(--nav-height);
+}
+
+header .header,
+footer .footer {
+  visibility: hidden;
+}
+
+header .header[data-block-status="loaded"],
+footer .footer[data-block-status="loaded"] {
+  visibility: visible;
+}
+
+/* typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0.8em;
+  margin-bottom: 0.25em;
+  font-family: var(--heading-font-family);
+  font-weight: 900;
+  line-height: var(--heading-line-height);
+  color: var(--color-graphite);
+  scroll-margin: 40px;
+}
+
+h1 {
+  font-size: var(--heading-font-size-xxl);
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: var(--heading-font-size-xl);
+  letter-spacing: -0.015em;
+}
+
+h3 { font-size: var(--heading-font-size-m); }
+h4 { font-size: var(--heading-font-size-s); }
+h5 { font-size: var(--heading-font-size-xs); }
+h6 { font-size: var(--heading-font-size-xs); }
+
+@media (width >= 600px) {
+  h3 { font-size: var(--heading-font-size-l); }
+  h4 { font-size: var(--heading-font-size-m); }
+  h5 { font-size: var(--heading-font-size-s); }
+}
+
+@media (width >= 1200px) {
+  h3 { font-size: var(--heading-font-size-xl); }
+}
+
+p,
+dl,
+ol,
+ul,
+pre,
+blockquote {
+  margin-top: 0.8em;
+  margin-bottom: 0.25em;
+}
+
+main ul,
+main ol {
+  padding-inline-start: var(--space-l);
+}
+
+main ul ul,
+main ul ol,
+main ol ul,
+main ol ol {
+  padding-inline-start: var(--space-m);
+}
+
+code,
+pre {
+  font-size: var(--body-font-size-s);
+}
+
+pre {
+  padding: var(--space-l);
+  border-radius: var(--space-s);
+  background-color: var(--light-color);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+strong {
+  font-weight: 600;
+}
+
+/* links */
+a:any-link {
+  color: var(--link-color);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: rgb(50 62 72 / 30%);
+  overflow-wrap: break-word;
+  transition: color 0.15s ease-in-out;
+}
+
+a:hover {
+  color: var(--color-orange);
+  text-decoration: underline;
+  text-decoration-color: var(--color-orange);
+}
+
+/* buttons (AEM default content: links in standalone paragraphs) */
+p.button-container {
+  margin: var(--space-m) 0;
+}
+
+a.button:any-link,
+button.button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  max-width: 100%;
+  margin: 0;
+  border: none;
+  border-radius: var(--border-radius-pill);
+  padding: 12px 24px;
+  font: inherit;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 1.75;
+  text-align: center;
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: normal;
+  background-color: var(--color-red);
+  color: var(--color-white);
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: var(--transition-base);
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
+}
+
+/* Primary variant */
+a.button.primary:any-link,
+button.button.primary {
+  background-color: var(--color-red);
+  color: var(--color-white);
+}
+
+a.button:any-link:hover,
+a.button:any-link:focus-visible,
+button.button:hover,
+button.button:focus-visible {
+  background-color: var(--color-orange);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+a.button.primary:hover,
+a.button.primary:focus-visible,
+button.button.primary:hover,
+button.button.primary:focus-visible {
+  background-color: var(--color-orange);
+  color: var(--color-white);
+}
+
+a.button:any-link:focus-visible,
+button.button:focus-visible {
+  outline: 2px solid var(--color-graphite);
+  outline-offset: 2px;
+}
+
+a.button[aria-disabled='true'],
+a.button[aria-disabled='true']:hover,
+a.button[aria-disabled='true']:focus-visible,
+button.button:disabled,
+button.button:disabled:hover,
+button.button:disabled:focus-visible {
+  background-color: var(--color-gray-200);
+  color: var(--color-gray-500);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+a.button.secondary,
+button.button.secondary {
+  border: 3px solid var(--color-graphite);
+  background-color: var(--color-graphite);
+  color: var(--color-white);
+}
+
+a.button.secondary:hover,
+a.button.secondary:focus-visible,
+button.button.secondary:hover,
+button.button.secondary:focus-visible {
+  background-color: var(--color-graphite-light);
+  border-color: var(--color-graphite-light);
+  color: var(--color-white);
+}
+
+/* main content area – use design tokens for rhythm */
+main > div {
+  margin: var(--main-block-space) var(--content-padding-inline);
+}
+
+main img {
+  max-width: 100%;
+  width: auto;
+  height: auto;
+}
+
+.icon {
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+}
+
+.icon :is(img, svg) {
+  height: 100%;
+  width: 100%;
+}
+
+/* Global logo: adaptive color and consistent size everywhere */
+.icon.icon-logo {
+  width: 200px;
+  height: 45px;
+  color: var(--color-orange);
+}
+
+main .icon.icon-logo {
+  display: inline-block;
+  vertical-align: middle;
+  padding-right: 10px;
+  margin-bottom: 4px;
+}
+
+/* Constrain default content images */
+main .default-content-wrapper img {
+  max-width: 600px;
+  margin: 24px auto;
+  display: block;
+  border-radius: var(--border-radius-sm);
+}
+
+/* sections – boilerplate structure with design tokens */
+main > .section {
+  margin: inherit;
+  padding-block: var(--space-xl);
+}
+
+main > .section[data-background-image] {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+main > .section:first-child {
+  padding-block-start: 0;
+
+  /* Reduce CLS: contain layout so section appearance causes less reflow.
+     Exclude social-share section: contain creates a containing block for position:fixed,
+     which would break the sticky share buttons. */
+  contain: layout;
+}
+
+main > .section:has(.social-share) {
+  contain: none;
+}
+
+main > .section > div {
+  max-width: var(--grid-container-width);
+  margin: auto;
+  padding: 0 var(--content-padding-inline);
+}
+
+/* Section column layouts (section-metadata layout + arrange, or data-layout / data-arrange) */
+.section .layout {
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  width: 100%;
+  align-items: stretch;
+}
+
+/* Wider readable band than default 83.4% when using explicit columns */
+main > .section:has(> .layout) > .layout {
+  max-width: min(1200px, 100%);
+  width: 100%;
+  margin-inline: auto;
+}
+
+.section .layout > div {
+  flex: 0 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+  padding-block-end: var(--space-l);
+}
+
+@media (width >= 900px) {
+  .section .layout {
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    gap: clamp(var(--space-2xl), 5vw, 64px);
+  }
+
+  .section .layout > div {
+    padding: 0;
+    padding-block-end: 0;
+  }
+
+  .section .layout .w-10 { width: 10%; }
+  .section .layout .w-20 { width: 20%; }
+  .section .layout .w-25 { width: 25%; }
+  .section .layout .w-30 { width: 30%; }
+  .section .layout .w-33 { width: 33.33%; }
+  .section .layout .w-40 { width: 40%; }
+  .section .layout .w-42 { width: 42%; }
+  .section .layout .w-50 { width: 50%; }
+  .section .layout .w-58 { width: 58%; }
+  .section .layout .w-60 { width: 60%; }
+  .section .layout .w-66 { width: 66.66%; }
+  .section .layout .w-70 { width: 70%; }
+  .section .layout .w-75 { width: 75%; }
+  .section .layout .w-80 { width: 80%; }
+  .section .layout .w-90 { width: 90%; }
+}
+
+/* section metadata */
+main .section.light,
+main .section.highlight {
+  background-color: var(--light-color);
+  margin: 0;
+  padding: var(--section-block-space) 0;
+}
+
+/* section-metadata style=mobile-only: visible only on mobile */
+main > .section.mobile-only {
+  background-color: var(--color-graphite);
+  color: var(--color-white);
+  margin: 0;
+  padding: var(--space-3xl) 0;
+  text-align: center;
+}
+
+main > .section.mobile-only h2,
+main > .section.mobile-only h3,
+main > .section.mobile-only p {
+  color: var(--color-white);
+}
+
+main > .section.mobile-only img {
+  filter: brightness(0) invert(1);
+  max-width: 250px;
+}
+
+main > .section.mobile-only a.button:any-link {
+  background: linear-gradient(135deg, var(--color-red), var(--color-orange));
+  color: var(--color-white);
+  border: none;
+}
+
+@media (width >= 900px) {
+  main > .section.mobile-only {
+    display: none;
+  }
+}
+
+/* section-metadata style=divider: content-width (grid) border-bottom */
+main > .section.divider {
+  position: relative;
+}
+
+main > .section.divider::after {
+  content: '';
+  display: block;
+  max-width: var(--grid-container-width);
+  padding: 12px 0 24px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+main > .section.divider.center,
+main > .section.center {
+  text-align: center;
+}
+
+/* Keep each metadata wrapper full width so grids/sliders layout correctly; copy still centers via text-align above */
+main > .section.center > div {
+  width: 100%;
+}
+
+/* section-metadata or block style: spacer utilities – add to section metadata or block styles for readability gaps */
+.spacer-top-s { margin-top: var(--space-s); }
+.spacer-top-m { margin-top: var(--space-m); }
+.spacer-top-l { margin-top: var(--space-l); }
+.spacer-bottom-s { margin-bottom: var(--space-s); }
+.spacer-bottom-m { margin-bottom: var(--space-m); }
+.spacer-bottom-l { margin-bottom: var(--space-l); }
+
+/* section-metadata style=grey: cream/linen background */
+main > .section.grey {
+  background-color: var(--color-cream);
+  color: var(--color-graphite);
+  margin: 0;
+  padding: var(--space-3xl) 0;
+}
+
+/* section-metadata style=dark: graphite dark background */
+main > .section.dark {
+  background-color: var(--color-graphite);
+  color: var(--color-white);
+  margin: 0;
+  padding: var(--space-3xl) 0;
+}
+
+main > .section.dark h1,
+main > .section.dark h2,
+main > .section.dark h3,
+main > .section.dark h4,
+main > .section.dark h5,
+main > .section.dark h6,
+main > .section.dark p {
+  color: var(--color-white);
+}
+
+main > .section.dark a:any-link {
+  color: var(--color-white);
+  text-decoration-color: rgb(255 255 255 / 40%);
+}
+
+main > .section.dark a.button:any-link,
+main > .section.dark button.button {
+  background-color: var(--color-red);
+  color: var(--color-white);
+}
+
+main > .section.dark a.button:any-link:hover,
+main > .section.dark button.button:hover {
+  background-color: var(--color-orange);
+  color: var(--color-white);
+}
+
+/* Eyebrow headings (h3 before h2 = category label, like "Platform Capabilities") */
+main .section .default-content-wrapper > h3:first-child {
+  color: var(--color-orange);
+  font-size: 20px;
+  font-weight: 900;
+  text-align: center;
+}
+
+main .section .default-content-wrapper > h3:first-child + h2 {
+  text-align: center;
+  margin-top: 4px;
+}

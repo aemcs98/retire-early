@@ -1,0 +1,56 @@
+.columns > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-l);
+}
+
+.columns img {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+}
+
+.columns > div > div {
+  flex: 1;
+  text-align: center;
+  padding: 32px 24px;
+}
+
+.columns > div > div h4 {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--color-graphite);
+  margin: 16px 0 8px;
+}
+
+.columns > div > div p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-graphite-light);
+  margin: 0 0 16px;
+}
+
+.columns > div > div a {
+  display: inline-block;
+  padding: 10px 24px;
+  border-radius: var(--border-radius-pill);
+  background-color: var(--color-graphite);
+  color: var(--color-white);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: var(--transition-base);
+}
+
+.columns > div > div a:hover {
+  background-color: var(--color-graphite-light);
+}
+
+@media (width >= 900px) {
+  .columns > div {
+    flex-direction: row;
+    gap: 24px;
+  }
+}

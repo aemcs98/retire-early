@@ -1,0 +1,452 @@
+/* Hero block – Heritage Elite, mobile-first */
+
+.hero-container .hero-wrapper {
+  max-width: unset;
+  padding: 0;
+}
+
+.hero {
+  position: relative;
+  background-color: light-dark(var(--color-parchment), var(--color-obsidian));
+}
+
+/* Image */
+.hero > div:first-child {
+  position: relative;
+  line-height: 0;
+}
+
+.hero .hero-img-light,
+.hero .hero-img-dark {
+  line-height: 0;
+}
+
+/* Gradient fade effect at the bottom of the hero image */
+.hero > div:first-child::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 65%;
+  background: linear-gradient(to bottom, transparent 0%, light-dark(var(--color-parchment), var(--color-obsidian)) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+
+/* Dual-image hero: light shown by default, dark hidden */
+.hero .hero-img-dark {
+  display: none;
+}
+
+/* Dark theme: swap images (must match light-dark() triggers, not OS preference) */
+.dark-scheme .hero .hero-img-light,
+:root[data-theme='dark'] .hero .hero-img-light {
+  display: none;
+}
+
+.dark-scheme .hero .hero-img-dark,
+:root[data-theme='dark'] .hero .hero-img-dark {
+  display: block;
+}
+
+.hero picture img {
+  display: block;
+  width: 100%;
+  max-height: 580px;
+  object-fit: cover;
+  opacity: 0.55;
+}
+
+/* Text overlay */
+.hero > div:last-child {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 40px var(--content-padding-inline);
+  display: flex;
+  align-items: center;
+}
+
+.hero > div:last-child > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-m);
+  max-width: 600px;
+}
+
+/* Hide the second image row when hero block decoration hasn't run (Target offer injection) */
+.hero > div:nth-child(2):not(.hero-img-dark, .hero-img-light, .hero-text) {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes hero-enter {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero > div:last-child > div {
+    animation: hero-enter 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .hero .hero-tagline {
+    animation: hero-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+  }
+
+  .hero h1 {
+    animation: hero-enter 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+  }
+
+  .hero p.button-container {
+    animation: hero-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+  }
+}
+
+/* Tagline */
+.hero .hero-tagline {
+  font-family: var(--font-family-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-gold);
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  margin: 0;
+}
+
+/* Heading */
+.hero h1 {
+  margin: 0;
+  font-family: var(--font-family-serif);
+  font-size: clamp(2rem, 8vw, 4.5rem);
+  font-weight: 500;
+  line-height: 1.05;
+  color: light-dark(var(--color-ink), var(--color-parchment));
+}
+
+.hero h1 em {
+  font-weight: 400;
+  font-style: italic;
+  background: linear-gradient(135deg, var(--color-rust) 0%, var(--color-gold) 100%);
+  background-clip: text;
+  color: transparent;
+}
+
+.dark-scheme .hero h1 em,
+:root[data-theme='dark'] .hero h1 em {
+  background: linear-gradient(135deg, var(--color-rust-bright) 0%, var(--color-gold) 100%);
+  background-clip: text;
+  color: transparent;
+}
+
+/* Body text — hidden on mobile */
+.hero p:not(.button-container, .hero-tagline) {
+  display: none;
+  max-width: 550px;
+  margin: 0;
+  font-family: var(--font-family-serif);
+  font-size: 1.15rem;
+  color: light-dark(var(--color-ink), var(--color-muted));
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+}
+
+.hero p.button-container {
+  margin-top: var(--space-s);
+}
+
+/* Icon */
+.hero .icon {
+  flex-shrink: 0;
+  width: 165px;
+  height: 45px;
+}
+
+.hero .icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Dark-mode image: blend into obsidian bg with soft edges */
+.dark-scheme .hero .hero-img-dark picture img,
+:root[data-theme='dark'] .hero .hero-img-dark picture img {
+  opacity: 0.3;
+  mask-image: radial-gradient(ellipse 85% 70% at 50% 35%, black 25%, transparent 100%);
+}
+
+/* Dark mode cinematic fade uses obsidian */
+.dark-scheme .hero > div:first-child::after,
+:root[data-theme='dark'] .hero > div:first-child::after {
+  background: linear-gradient(to bottom, transparent 0%, var(--color-obsidian) 100%);
+}
+
+/* Tablet: show body text */
+@media (width >= 600px) {
+  .hero p:not(.button-container, .hero-tagline) {
+    display: block;
+    font-size: 1.3rem;
+  }
+}
+
+/* Desktop */
+@media (width >= 900px) {
+  .hero > div:last-child {
+    padding: 100px 5vw;
+  }
+
+  .hero > div:last-child > div {
+    max-width: 1000px;
+    margin: 0 25%;
+  }
+
+  .hero h1 {
+    font-size: clamp(3.5rem, 5vw, 6rem);
+  }
+}
+
+@media (width >= 1200px) {
+  .hero > div:last-child {
+    padding: 100px 6vw;
+  }
+
+  .hero h1 {
+    font-size: clamp(4rem, 5.5vw, 6.5rem);
+  }
+}
+
+/* No-image fallback */
+.hero.no-image > div:last-child {
+  position: static;
+  padding: 80px var(--content-padding-inline);
+}
+
+.hero.no-image > div:last-child > div {
+  align-items: center;
+  text-align: center;
+  max-width: var(--grid-container-width);
+  margin: 0 auto;
+}
+
+.hero.no-image p:not(.button-container, .hero-tagline) {
+  display: block;
+}
+
+@media (width >= 900px) {
+  .hero.no-image > div:last-child {
+    min-height: 400px;
+    padding: 100px 5vw;
+  }
+}
+
+@media (width >= 1200px) {
+  .hero.no-image > div:last-child {
+    padding: 120px 6vw;
+  }
+}
+
+/* Background color variants */
+.hero.rust {
+  background-color: var(--color-rust);
+}
+
+/* Video variant */
+.hero.video {
+  display: grid;
+  align-content: end;
+  min-height: clamp(520px, calc(100svh - var(--nav-height, 64px)), 760px);
+  padding: 56px var(--content-padding-inline, 24px) 64px;
+  overflow: hidden;
+  background:
+    linear-gradient(115deg, rgb(161 79 43 / 70%), transparent 46%),
+    linear-gradient(35deg, rgb(197 160 89 / 48%), transparent 48%),
+    var(--color-obsidian, #060d0d);
+  color: var(--color-parchment, #f5f2ed);
+}
+
+.hero.video video {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+.hero.video::before,
+.hero.video::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+}
+
+.hero.video::before {
+  z-index: 1;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgb(245 242 237 / 9%) 1px, transparent 1px) 0 0 / 56px 56px,
+    linear-gradient(180deg, rgb(245 242 237 / 7%) 1px, transparent 1px) 0 0 / 56px 56px,
+    linear-gradient(90deg, rgb(6 13 13 / 88%) 0%, rgb(6 13 13 / 58%) 42%, rgb(6 13 13 / 28%) 100%),
+    linear-gradient(0deg, rgb(6 13 13 / 82%) 0%, rgb(6 13 13 / 18%) 48%, rgb(6 13 13 / 50%) 100%);
+}
+
+.hero.video::after {
+  z-index: 2;
+  inset: 0;
+  background: radial-gradient(circle at 22% 75%, rgb(197 160 89 / 24%), transparent 34%);
+  mix-blend-mode: screen;
+}
+
+.hero-video-content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+.hero.video p:not(.button-container, .hero-tagline) {
+  display: block;
+  max-width: 680px;
+  margin: 24px 0 0;
+  color: rgb(245 242 237 / 88%);
+  font-size: var(--body-font-size-l, 18px);
+  line-height: 1.45;
+  letter-spacing: 0;
+  text-shadow: 0 10px 28px rgb(0 0 0 / 42%);
+}
+
+.hero.video p:first-child {
+  margin: 0 0 16px;
+  color: var(--color-gold, #c5a059);
+  font-family: var(--font-family-mono, monospace);
+  font-size: var(--body-font-size-xs, 12px);
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.hero.video h1 {
+  max-width: 920px;
+  margin: 0;
+  color: var(--color-parchment, #f5f2ed);
+  font-family: var(--font-family-serif, georgia, serif);
+  font-size: clamp(3rem, 12vw, 6.5rem);
+  font-weight: 500;
+  line-height: 0.96;
+  text-shadow: 0 16px 48px rgb(0 0 0 / 52%);
+}
+
+.hero.video h1 strong {
+  font-weight: 500;
+}
+
+.hero.video h1 em:not(.hero-tagline) {
+  display: inline-block;
+  padding-inline: 0.1em;
+  color: var(--color-gold, #c5a059);
+  font-style: italic;
+  background: none;
+}
+
+.hero-video-controls {
+  position: absolute;
+  right: var(--content-padding-inline, 24px);
+  bottom: 24px;
+  z-index: 4;
+  display: flex;
+  gap: 6px;
+}
+
+.hero-video-control {
+  padding: 8px 12px;
+  border: 1px solid rgb(245 242 237 / 52%);
+  border-radius: 4px;
+  background: rgb(6 13 13 / 62%);
+  color: var(--color-parchment, #f5f2ed);
+  font: 600 var(--body-font-size-xs, 12px) / 1 var(--font-family-sans, sans-serif);
+  cursor: pointer;
+}
+
+.hero-video-control:hover,
+.hero-video-control:focus {
+  background: rgb(6 13 13 / 82%);
+}
+
+.hero-video-control[aria-pressed='false'] {
+  opacity: 0.68;
+}
+
+@media (width >= 900px) {
+  .hero.video {
+    padding: 72px var(--content-padding-inline, 32px) 84px;
+  }
+
+  .hero.video p {
+    font-size: var(--body-font-size-xl, 20px);
+  }
+}
+
+@media (width < 600px) {
+  .hero.video {
+    min-height: 620px;
+  }
+
+  .hero.video video {
+    object-position: 55% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero.video video,
+  .hero-video-controls {
+    display: none;
+  }
+}
+
+.hero.rust h1,
+.hero.rust p:not(.button-container, .hero-tagline) {
+  color: var(--color-parchment);
+}
+
+/* Variant heros: reset gradient text and use solid color */
+:root .hero.rust h1 em {
+  background: none;
+  background-clip: unset;
+  color: var(--color-gold);
+}
+
+.hero.gold {
+  background-color: var(--color-gold);
+}
+
+.hero.gold h1,
+.hero.gold p:not(.button-container, .hero-tagline) {
+  color: var(--color-ink);
+}
+
+.hero.ink {
+  background-color: var(--color-ink);
+}
+
+.hero.ink h1,
+.hero.ink p:not(.button-container, .hero-tagline) {
+  color: var(--color-parchment);
+}
+
+:root .hero.ink h1 em {
+  background: none;
+  background-clip: unset;
+  color: var(--color-rust);
+}

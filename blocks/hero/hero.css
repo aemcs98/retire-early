@@ -1,0 +1,524 @@
+/* Hero block – split-panel layout, mobile-first */
+
+.hero-container .hero-wrapper {
+  max-width: unset;
+  padding: 0;
+
+  @media (width >= 1200px) {
+    max-width: 90%;
+    margin: var(--space-l) auto;
+
+    .hero {
+      border-radius: 10px;
+
+      img {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+      }
+    }
+  }
+}
+
+/* Mobile: column — image on top, text below */
+.hero {
+  background-color: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Image — 16:9 on mobile so it doesn't dominate */
+.hero > div:first-child {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.hero .hero-img-light,
+.hero .hero-img-dark {
+  line-height: 0;
+}
+
+/* Dual-image hero: dark variant always hidden (light mode only) */
+.hero .hero-img-dark {
+  display: none;
+}
+
+.hero picture img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Text — below image on mobile */
+.hero > div:last-child {
+  padding: 48px var(--content-padding-inline);
+  display: flex;
+  align-items: flex-start;
+}
+
+.hero > div:last-child > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-m);
+  max-width: 560px;
+}
+
+/* Hide the second image row when hero block decoration hasn't run */
+.hero > div:nth-child(2):not(.hero-img-dark, .hero-img-light, .hero-text) {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes hero-enter {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero > div:last-child > div {
+    animation: hero-enter 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .hero .hero-tagline {
+    animation: hero-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+  }
+
+  .hero h1 {
+    animation: hero-enter 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+  }
+
+  .hero p.button-container {
+    animation: hero-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+  }
+}
+
+/* Tagline */
+.hero .hero-tagline {
+  text-transform: uppercase;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Heading */
+.hero h1 {
+  margin: 0;
+  font-size: clamp(2rem, 8vw, 4rem);
+  font-weight: 700;
+  line-height: 1.08;
+  color: var(--color-ink);
+}
+
+.hero h1 em {
+  font-weight: 700;
+  font-style: normal;
+  color: var(--color-rust);
+}
+
+/* Body text — hidden on mobile, shown at tablet+ */
+.hero p:not(.button-container, .hero-tagline) {
+  display: none;
+  max-width: 550px;
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--color-gray-700);
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+}
+
+.hero p.button-container {
+  margin-top: var(--space-s);
+}
+
+/* Icon (logo) */
+.hero .icon {
+  flex-shrink: 0;
+  width: 165px;
+  height: 45px;
+}
+
+.hero .icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Tablet: show body text */
+@media (width >= 600px) {
+  .hero p:not(.button-container, .hero-tagline) {
+    display: block;
+    font-size: 1.15rem;
+  }
+}
+
+/* Desktop: side-by-side — content left, image right */
+@media (width >= 900px) {
+  .hero {
+    flex-direction: row;
+    min-height: 300px;
+    align-items: stretch;
+  }
+
+  .hero > div:first-child {
+    order: 2;
+    flex: 1;
+    aspect-ratio: unset;
+  }
+
+  /* picture must fill its flex parent so there's no gap behind it */
+  .hero picture {
+    display: block;
+    height: 100%;
+  }
+
+  .hero > div:last-child {
+    order: 1;
+    padding: 80px var(--space-xl) 80px calc(max(0px, (100vw - 1264px) / 2) + var(--space-xl));
+    align-items: center;
+  }
+
+  .hero > div:last-child > div {
+    max-width: 650px;
+    margin: 0;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 4vw, 4.5rem);
+  }
+}
+
+@media (width >= 1200px) {
+  .hero > div:last-child {
+    flex-basis: 45%;
+    padding: 30px var(--space-xl) 30px calc(max(0px, (100vw - 1264px) / 3));
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 3vw, 5rem);
+  }
+}
+
+/* No-image fallback */
+.hero.no-image {
+  flex-direction: column;
+}
+
+.hero.no-image > div:last-child {
+  padding: 80px var(--content-padding-inline);
+  align-items: center;
+}
+
+.hero.no-image > div:last-child > div {
+  align-items: center;
+  text-align: center;
+  max-width: var(--grid-container-width);
+  margin: 0 auto;
+}
+
+.hero.no-image p:not(.button-container, .hero-tagline) {
+  display: block;
+}
+
+@media (width >= 900px) {
+  .hero.no-image {
+    min-height: 400px;
+  }
+
+  .hero.no-image > div:last-child {
+    padding: 100px 5vw;
+  }
+}
+
+@media (width >= 1200px) {
+  .hero.no-image > div:last-child {
+    padding: 120px 6vw;
+  }
+}
+
+/* ==========================================================================
+   Background color variants
+   ========================================================================== */
+
+.hero.rust {
+  background-color: var(--color-rust);
+}
+
+.hero.rust h1,
+.hero.rust p:not(.button-container, .hero-tagline) {
+  color: var(--color-parchment);
+}
+
+:root .hero.rust h1 em {
+  background: none;
+  background-clip: unset;
+  color: var(--color-gold);
+}
+
+.hero.gold {
+  background-color: var(--color-gold);
+}
+
+.hero.gold h1,
+.hero.gold p:not(.button-container, .hero-tagline) {
+  color: var(--color-parchment);
+}
+
+.hero.ink {
+  background-color: var(--color-ink);
+}
+
+.hero.ink .hero-tagline {
+  color: var(--color-parchment);
+  font-weight: normal;
+}
+
+.hero.ink h1,
+.hero.ink h2,
+.hero.ink p:not(.button-container, .hero-tagline) {
+  color: var(--color-parchment);
+}
+
+:root .hero.ink h1 em,
+:root .hero.ink h2 em {
+  background: none;
+  background-clip: unset;
+  color: var(--color-gold);
+}
+
+/* ==========================================================================
+   Overlay variant — full-bleed image with text laid over it.
+   Use for banner-style heroes where content should sit on top of the image
+   instead of beside it (e.g. "Hero (ink, overlay)").
+   ========================================================================== */
+
+/* stylelint-disable no-descending-specificity -- variant overrides intentionally come after base + no-image rules */
+
+.hero.overlay {
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 360px;
+  overflow: hidden;
+}
+
+/* Image becomes the absolute, full-bleed background */
+.hero.overlay > div:first-child {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  aspect-ratio: unset;
+}
+
+/* EDS wraps the <picture> in an extra <div> with no intrinsic size.
+   Force that intermediate div to fill its absolute parent so the
+   subsequent height:100% cascade reaches the <picture> and <img>. */
+.hero.overlay > div:first-child > div {
+  width: 100%;
+  height: 100%;
+}
+
+.hero.overlay picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hero.overlay picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center right;
+}
+
+/* Gradient overlay — darker on the left where the text sits */
+.hero.overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgb(26 26 46 / 75%) 0%,
+    rgb(26 26 46 / 55%) 100%
+  );
+}
+
+/* Text sits above the image + gradient */
+.hero.overlay > div:last-child {
+  position: relative;
+  z-index: 2;
+  padding: 56px var(--content-padding-inline);
+  align-items: flex-start;
+}
+
+.hero.overlay > div:last-child > div {
+  max-width: 560px;
+  gap: var(--space-s);
+}
+
+/* Always show body text in overlay — the layout depends on it */
+.hero.overlay p:not(.button-container, .hero-tagline) {
+  display: block;
+}
+
+/* Overlay heroes typically use h2 instead of h1 */
+.hero.overlay h2 {
+  margin: 0;
+  font-size: clamp(1.75rem, 6vw, 3rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--color-ink);
+}
+
+.hero.overlay.ink h2 {
+  color: var(--color-parchment);
+}
+
+/* Checkmark list — used by overlay heroes like the AT&T Guarantee */
+.hero.overlay ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hero.overlay ul li {
+  position: relative;
+  padding-left: 32px;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-parchment);
+}
+
+.hero.overlay ul li::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 0.45em;
+  width: 14px;
+  height: 8px;
+  border-left: 2px solid currentcolor;
+  border-bottom: 2px solid currentcolor;
+  transform: rotate(-45deg);
+}
+
+@media (width >= 600px) {
+  .hero.overlay p:not(.button-container, .hero-tagline) {
+    font-size: 1rem;
+  }
+}
+
+@media (width >= 900px) {
+  .hero.overlay {
+    flex-direction: column;
+    min-height: 360px;
+  }
+
+  /* Keep the image wrapper absolute (out of flex flow) at desktop too —
+     the default .hero desktop rule would otherwise re-add order/flex. */
+  .hero.overlay > div:first-child {
+    position: absolute;
+    order: 0;
+    flex: unset;
+  }
+
+  .hero.overlay > div:last-child {
+    order: 0;
+    padding: 72px var(--space-xl) 72px calc(max(0px, (100vw - 1264px) / 2) + var(--space-xl));
+    align-items: flex-start;
+  }
+
+  .hero.overlay > div:last-child > div {
+    max-width: 520px;
+    margin: 0;
+  }
+
+  /* Stronger left-side gradient at desktop so text stays legible
+     while the right side of the image breathes */
+  .hero.overlay::before {
+    background: linear-gradient(
+      90deg,
+      rgb(26 26 46 / 85%) 0%,
+      rgb(26 26 46 / 60%) 35%,
+      rgb(26 26 46 / 10%) 70%,
+      rgb(26 26 46 / 0%) 100%
+    );
+  }
+}
+
+@media (width >= 1200px) {
+  .hero.overlay {
+    min-height: 500px;
+  }
+
+  .hero.overlay > div:last-child {
+    flex-basis: auto;
+    padding: 88px var(--space-xl) 88px calc(max(0px, (100vw - 1264px) / 3) + var(--space-xl));
+  }
+
+  .hero.overlay h2 {
+    font-size: clamp(2.25rem, 3vw, 3.25rem);
+  }
+}
+
+/* Lay out a row of buttons (created by hero.js when consecutive
+   .button-container paragraphs appear) */
+.hero .hero-button-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-s);
+  margin: var(--space-s) 0 0;
+}
+
+.hero .hero-button-group p.button-container {
+  margin: 0;
+}
+
+/* Overlay buttons — white pill with brand-blue text (primary),
+   white-bordered ghost with white text → invert on hover (secondary) */
+.hero.overlay a.button.primary:any-link {
+  background-color: var(--color-parchment);
+  border-color: var(--color-parchment);
+  color: var(--color-rust);
+}
+
+.hero.overlay a.button.primary:any-link:hover,
+.hero.overlay a.button.primary:any-link:focus-visible {
+  background-color: var(--color-parchment);
+  border-color: var(--color-parchment);
+  color: var(--color-rust-bright);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 25%);
+}
+
+.hero.overlay a.button.secondary:any-link {
+  background-color: transparent;
+  border-color: var(--color-parchment);
+  color: var(--color-parchment);
+  font-style: normal;
+}
+
+.hero.overlay a.button.secondary:any-link:hover,
+.hero.overlay a.button.secondary:any-link:focus-visible {
+  background-color: var(--color-parchment);
+  border-color: var(--color-parchment);
+  color: var(--color-rust);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 25%);
+}
+
+:is(main, article.article-body) > .section.will-reveal.revealed.hero-container:has(.hero.overlay) {
+  padding-block: 0;
+}
+
+/* stylelint-enable no-descending-specificity */

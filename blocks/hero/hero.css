@@ -1,0 +1,276 @@
+/* Hero block – image left, text right */
+
+.hero-container .hero-wrapper {
+  max-width: unset;
+  padding: 0;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  background-color: light-dark(var(--color-parchment), var(--color-obsidian));
+}
+
+/* ─── Image column ─── */
+.hero .hero-image {
+  position: relative;
+  overflow: hidden;
+  height: 300px; /* explicit height in mobile column layout */
+}
+
+/* Absolute stack: each layer fills its positioned parent, no height:100% chains */
+.hero .hero-img-light,
+.hero .hero-img-dark {
+  position: absolute;
+  inset: 0;
+}
+
+.hero .hero-image picture {
+  position: absolute;
+  inset: 0;
+}
+
+.hero .hero-image picture img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Dual-image: light shown by default, dark hidden */
+.hero .hero-img-dark {
+  display: none;
+}
+
+.dark-scheme .hero .hero-img-light,
+:root[data-theme='dark'] .hero .hero-img-light {
+  display: none;
+}
+
+.dark-scheme .hero .hero-img-dark,
+:root[data-theme='dark'] .hero .hero-img-dark {
+  display: block;
+}
+
+/* ─── Text column ─── */
+.hero .hero-text {
+  display: flex;
+  align-items: center;
+  padding: 40px var(--content-padding-inline);
+}
+
+.hero .hero-text > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-m);
+}
+
+/* Hide injected rows before decoration runs (Target offer injection) */
+.hero > div:nth-child(2):not(.hero-img-dark, .hero-img-light, .hero-text, .hero-image) {
+  display: none;
+}
+
+/* ─── Animations ─── */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes hero-enter {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero .hero-text > div {
+    animation: hero-enter 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .hero .hero-tagline {
+    animation: hero-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+  }
+
+  .hero h1 {
+    animation: hero-enter 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+  }
+
+  .hero p.button-container {
+    animation: hero-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+  }
+}
+
+/* ─── Tagline ─── */
+.hero .hero-tagline {
+  font-family: var(--font-family-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-gold);
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  margin: 0;
+}
+
+/* ─── Heading ─── */
+.hero h1 {
+  margin: 0;
+  font-family: var(--font-family-serif);
+  font-size: clamp(2rem, 8vw, 4.5rem);
+  font-weight: 500;
+  line-height: 1.05;
+  color: light-dark(var(--color-ink), var(--color-parchment));
+}
+
+.hero h1 em {
+  font-weight: 400;
+  font-style: italic;
+  background: linear-gradient(135deg, var(--color-rust) 0%, var(--color-gold) 100%);
+  background-clip: text;
+  color: transparent;
+}
+
+.dark-scheme .hero h1 em,
+:root[data-theme='dark'] .hero h1 em {
+  background: linear-gradient(135deg, var(--color-rust-bright) 0%, var(--color-gold) 100%);
+  background-clip: text;
+  color: transparent;
+}
+
+/* ─── Body text ─── */
+.hero p:not(.button-container, .hero-tagline) {
+  max-width: 480px;
+  margin: 0;
+  font-family: var(--font-family-serif);
+  font-size: 1.1rem;
+  color: light-dark(var(--color-ink), var(--color-muted));
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+}
+
+.hero p.button-container {
+  margin-top: var(--space-s);
+}
+
+/* ─── Icon ─── */
+.hero .icon {
+  flex-shrink: 0;
+  width: 165px;
+  height: 45px;
+}
+
+.hero .icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ─── Tablet: side-by-side ─── */
+@media (width >= 600px) {
+  .hero {
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 500px;
+  }
+
+  .hero .hero-image {
+    flex: 1;
+    height: auto; /* let flex stretch determine height */
+  }
+
+  .hero .hero-text {
+    flex: 1;
+    padding: 60px 5vw;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 4vw, 4rem);
+  }
+}
+
+/* ─── Desktop ─── */
+@media (width >= 900px) {
+  .hero {
+    min-height: 580px;
+  }
+
+  .hero .hero-text {
+    padding: 80px 6vw;
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 4.5vw, 5rem);
+  }
+}
+
+@media (width >= 1200px) {
+  .hero .hero-text {
+    padding: 100px 6vw;
+  }
+}
+
+/* ─── No-image fallback ─── */
+.hero.no-image .hero-text {
+  padding: 80px var(--content-padding-inline);
+}
+
+.hero.no-image .hero-text > div {
+  align-items: center;
+  text-align: center;
+  max-width: var(--grid-container-width);
+  margin: 0 auto;
+}
+
+@media (width >= 900px) {
+  .hero.no-image .hero-text {
+    min-height: 400px;
+    padding: 100px 5vw;
+  }
+}
+
+@media (width >= 1200px) {
+  .hero.no-image .hero-text {
+    padding: 120px 6vw;
+  }
+}
+
+/* ─── Color variants ─── */
+.hero.rust {
+  background-color: var(--color-rust);
+}
+
+.hero.rust h1,
+.hero.rust p:not(.button-container, .hero-tagline) {
+  color: var(--color-parchment);
+}
+
+:root .hero.rust h1 em {
+  background: none;
+  background-clip: unset;
+  color: var(--color-gold);
+}
+
+.hero.gold {
+  background-color: var(--color-gold);
+}
+
+.hero.gold h1,
+.hero.gold p:not(.button-container, .hero-tagline) {
+  color: var(--color-ink);
+}
+
+.hero.ink {
+  background-color: var(--color-ink);
+}
+
+.hero.ink h1,
+.hero.ink p:not(.button-container, .hero-tagline) {
+  color: var(--color-parchment);
+}
+
+:root .hero.ink h1 em {
+  background: none;
+  background-clip: unset;
+  color: var(--color-rust);
+}

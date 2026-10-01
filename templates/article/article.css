@@ -1,0 +1,431 @@
+/* ==========================================================================
+   Article (blog post) template — editorial layout matching ouraring.com/blog:
+   title on top → contained hero image → author/date byline, then a narrow
+   single content column of clean sans body text. Overrides the base hero.css
+   full-bleed overlay treatment used on marketing pages.
+   ========================================================================== */
+
+/* Article measures — the outer two-column width, and the readable body column.
+   Hero elements and the content grid align to the same left edge (--article-max),
+   so the layout reads as a single left-anchored column with a right sidebar. */
+.article main {
+  --article-max: 1120px;
+  --article-measure: 640px;
+}
+
+/* --------------------------------------------------------------------------
+   Hero: stack title, image, byline in normal flow (NOT an image overlay).
+   -------------------------------------------------------------------------- */
+.article .hero {
+  position: relative;
+  min-height: 0;
+  margin-top: 0;
+  padding: 0;
+  background: none;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* order: title (text cell) first, image second, byline (appended) last */
+.article .hero .hero-text {
+  order: 1;
+}
+
+.article .hero .hero-img {
+  order: 2;
+}
+
+.article .hero .article-author-container {
+  order: 3;
+}
+
+/* Title cell — reset the overlay positioning from hero.css to normal flow,
+   left-aligned, full column width (the column itself is constrained by the grid). */
+.article .hero .hero-text,
+.article .hero > div:last-child {
+  position: static;
+  inset: auto;
+  z-index: auto;
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.article .hero .hero-text > div,
+.article .hero > div:last-child > div {
+  display: block;
+  max-width: none;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  gap: 0;
+}
+
+/* Category eyebrow ("Meet Oura") — small uppercase brand label above the title */
+.article .hero .hero-tagline {
+  margin: 0 0 var(--space-s);
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-xs);
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: light-dark(var(--color-rust), var(--color-rust-bright));
+}
+
+/* Title — sans, medium weight, dark; matches source (not the big display serif) */
+.article .hero h1 {
+  margin: 0 0 var(--space-xl);
+  font-family: var(--body-font-family);
+  font-size: clamp(1.75rem, 3.2vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: light-dark(var(--color-ink), var(--color-parchment));
+  text-align: left;
+}
+
+/* Hero image — full column width, gentle rounding, ~16:10 crop */
+.article .hero .hero-img {
+  position: static;
+  inset: auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  height: auto;
+}
+
+.article .hero .hero-img > div,
+.article .hero .hero-img picture {
+  display: block;
+  height: auto;
+}
+
+.article .hero .hero-img picture img,
+.article .hero .hero-img img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: none;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* --------------------------------------------------------------------------
+   Author / Date byline — under the hero image, with a top divider.
+   -------------------------------------------------------------------------- */
+.article .hero .article-author-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0 var(--space-s);
+  width: 100%;
+  max-width: none;
+  margin: var(--space-m) 0 0;
+  padding-top: var(--space-m);
+  border-top: 1px solid light-dark(var(--color-gray-200), rgb(245 242 237 / 18%));
+}
+
+.article .hero .article-author {
+  font-size: var(--body-font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: light-dark(var(--color-rust), var(--color-rust-bright));
+}
+
+.article .hero .article-author::after {
+  content: '·';
+  margin-left: var(--space-s);
+  color: light-dark(var(--color-gray-400), rgb(245 242 237 / 35%));
+}
+
+.article .hero .article-date {
+  font-family: var(--font-family-serif);
+  font-size: var(--body-font-size-s);
+  font-style: italic;
+  color: light-dark(var(--color-gray-600), var(--color-muted));
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   Two-column layout — left column (hero + body) beside a right sidebar.
+   -------------------------------------------------------------------------- */
+.article main .article-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2xl);
+  max-width: var(--article-max);
+  margin: 0 auto;
+
+  /* Clear the fixed, transparent header (position: fixed reserves no flow
+     space) so the eyebrow/title don't sit under the nav. */
+  padding:
+    calc(var(--nav-height, 64px) + var(--space-2xl))
+    var(--content-padding-inline)
+    var(--space-4xl);
+}
+
+@media (width >= 900px) {
+  .article main .article-layout.has-aside {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: var(--space-4xl);
+    align-items: start;
+  }
+}
+
+.article main .article-main {
+  min-width: 0;
+}
+
+/* Article body — clean editorial content, full left-column width */
+.article main .article-body {
+  display: block;
+  padding: var(--space-2xl) 0 0;
+}
+
+.article main .article-body .section {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.article main .article-body .default-content-wrapper {
+  max-width: none;
+  margin: 0;
+}
+
+/* Body copy — 18px / 1.5, warm dark, generous paragraph spacing */
+.article main .article-body p {
+  margin: 0 0 var(--space-l);
+  font-family: var(--body-font-family);
+  font-size: 1.125rem;
+  line-height: 1.55;
+  color: var(--color-text-warm);
+}
+
+/* Section headings — sans, medium weight, dark; h3 larger than h4 */
+.article main .article-body h2,
+.article main .article-body h3 {
+  margin: var(--space-2xl) 0 var(--space-m);
+  font-family: var(--body-font-family);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 2.4vw, 1.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: light-dark(var(--color-ink), var(--color-parchment));
+}
+
+.article main .article-body h4 {
+  margin: var(--space-xl) 0 var(--space-s);
+  font-family: var(--body-font-family);
+  font-weight: 600;
+  font-size: 1.35rem;
+  line-height: 1.25;
+  color: light-dark(var(--color-ink), var(--color-parchment));
+}
+
+/* suppress any global accent dash under headings inside the article body */
+.article main .article-body :is(h2, h3, h4)::after {
+  content: none;
+}
+
+/* Inline content images — full column width, rounded */
+.article main .article-body p img,
+.article main .article-body picture img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin: var(--space-s) 0;
+}
+
+/* Links — the blog's light sky-blue, underline on hover only */
+.article main .article-body a:any-link {
+  color: #51b7e0;
+  text-decoration: none;
+}
+
+.article main .article-body a:hover,
+.article main .article-body a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* Blockquote — italic serif, left rule (source treatment) */
+.article main .article-body blockquote {
+  margin: var(--space-xl) 0;
+  padding: 0 0 0 var(--space-l);
+  border-left: 4px solid light-dark(var(--color-ink), var(--color-parchment));
+}
+
+.article main .article-body blockquote p {
+  font-family: var(--font-family-serif);
+  font-style: italic;
+  font-size: 1.15rem;
+  line-height: 1.5;
+  color: light-dark(var(--color-ink), var(--color-parchment));
+}
+
+.article main .article-body blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* "Shop …" CTA link inside the body → pill button on a pale-blue band feel */
+.article main .article-body p.button-container {
+  margin: var(--space-xl) 0;
+}
+
+.article main .article-body p.button-container a.button:any-link {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 999px;
+  background: var(--color-oura-blue);
+  color: #fff;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.article main .article-body p.button-container a.button:any-link:hover {
+  background: var(--color-oura-blue-dark);
+  text-decoration: none;
+}
+
+/* --------------------------------------------------------------------------
+   Right sidebar — Recent Posts list + "Join the Community" promo card.
+   -------------------------------------------------------------------------- */
+.article main .article-aside {
+  min-width: 0;
+}
+
+@media (width >= 900px) {
+  .article main .article-aside {
+    position: sticky;
+    top: calc(var(--nav-height, 64px) + var(--space-l));
+  }
+}
+
+.article main .article-aside .section {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* "Recent Posts" heading */
+.article main .article-aside h3 {
+  margin: 0 0 var(--space-l);
+  font-family: var(--body-font-family);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: light-dark(var(--color-ink), var(--color-parchment));
+}
+
+.article main .article-aside h3::after {
+  content: none;
+}
+
+/* Recent Posts list — divided rows, no bullets */
+.article main .article-aside ul {
+  list-style: none;
+  margin: 0 0 var(--space-2xl);
+  padding: 0;
+  border-top: 1px solid light-dark(var(--color-gray-200), rgb(245 242 237 / 14%));
+}
+
+.article main .article-aside li {
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid light-dark(var(--color-gray-200), rgb(245 242 237 / 14%));
+}
+
+.article main .article-aside li a:any-link {
+  display: block;
+  padding: var(--space-m) 0;
+  font-size: var(--body-font-size-s);
+  line-height: 1.4;
+  color: light-dark(var(--color-text-warm), var(--color-parchment));
+  text-decoration: none;
+}
+
+.article main .article-aside li a:hover,
+.article main .article-aside li a:focus-visible {
+  color: #51b7e0;
+}
+
+/* "Join the Community" promo card — image with overlaid title + Shop Now pill */
+.article main .article-aside p:has(img) {
+  position: relative;
+  margin: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.article main .article-aside p:has(img) img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+/* dark scrim so the overlaid title + button read on any photo */
+.article main .article-aside p:has(img)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgb(0 0 0 / 25%) 0%, transparent 35%, transparent 55%, rgb(0 0 0 / 35%) 100%);
+  pointer-events: none;
+}
+
+/* "Join the Community" caption — pill at the top of the card */
+.article main .article-aside p:has(img) + p {
+  position: absolute;
+  top: var(--space-l);
+  left: 50%;
+  z-index: 1;
+  margin: 0;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--color-ink);
+  color: #fff;
+  font-size: var(--body-font-size-s);
+  font-weight: 600;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+/* "Shop Now" button — pill near the bottom of the card */
+.article main .article-aside p:has(img) ~ p:last-child {
+  position: absolute;
+  bottom: var(--space-l);
+  left: 50%;
+  top: auto;
+  z-index: 1;
+  margin: 0;
+  transform: translateX(-50%);
+  background: none;
+  padding: 0;
+}
+
+.article main .article-aside p:has(img) ~ p:last-child a:any-link {
+  display: inline-block;
+  padding: 10px 24px;
+  border-radius: 999px;
+  background: #a2d3e8;
+  color: var(--color-ink);
+  font-size: var(--body-font-size-s);
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.article main .article-aside p:has(img) ~ p:last-child a:hover {
+  background: #8ec7e0;
+}

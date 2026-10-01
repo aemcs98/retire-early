@@ -1,0 +1,130 @@
+.table {
+  --table-border-color: light-dark(var(--color-gray-200), rgb(245 242 237 / 12%));
+
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 12px;
+}
+
+.table table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  font-size: var(--body-font-size-xs);
+}
+
+@media (width >= 600px) {
+  .table table {
+    font-size: var(--body-font-size-s);
+  }
+}
+
+@media (width >= 900px) {
+  .table table {
+    font-size: var(--body-font-size-m);
+  }
+}
+
+.table table th {
+  font-weight: 700;
+}
+
+.table table th,
+.table table td {
+  padding: 0.75em 0.85em;
+  text-align: left;
+}
+
+.table table thead tr {
+  border-top: 2px solid var(--table-border-color);
+  border-bottom: 2px solid var(--table-border-color);
+}
+
+.table table thead th {
+  font-family: var(--body-font-family);
+  font-weight: 700;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: light-dark(var(--color-ink), var(--color-parchment));
+}
+
+.table table tbody tr {
+  border-bottom: 1px solid var(--table-border-color);
+  transition: background-color 0.2s;
+}
+
+.table table tbody tr:hover {
+  background-color: light-dark(rgb(var(--rgb-amber) / 4%), rgb(var(--rgb-amber) / 5%));
+}
+
+.table table th p,
+.table table td p {
+  margin: 0;
+}
+
+.table table td p + p {
+  margin-top: 0.25em;
+}
+
+/* no header variant */
+.table.no-header table tbody tr {
+  border-top: 1px solid var(--table-border-color);
+}
+
+/* striped variant */
+.table.striped tbody tr:nth-child(odd) {
+  background-color: var(--light-color);
+}
+
+.table.striped tbody tr:nth-child(odd):hover {
+  background-color: light-dark(rgb(var(--rgb-amber) / 6%), rgb(var(--rgb-amber) / 8%));
+}
+
+/* bordered variant */
+.table.bordered table th,
+.table.bordered table td {
+  border: 1px solid var(--table-border-color);
+}
+
+/* ==========================================================================
+   Variations (author-facing modifier classes)
+   ========================================================================== */
+
+/* compact – tight cell padding + smaller text for dense reference/spec tables
+   with many rows; use when scanning many values matters more than breathing room. */
+.table.compact table th,
+.table.compact table td {
+  padding: 0.4em 0.6em;
+}
+
+.table.compact table {
+  font-size: var(--body-font-size-xs);
+}
+
+/* spacious – roomy cell padding for short, high-emphasis comparison tables;
+   use when a table has few rows and should feel airy and premium. */
+.table.spacious table th,
+.table.spacious table td {
+  padding: 1.25em 1.5em;
+}
+
+/* accent-header – amber brand-gradient header row with light text and a
+   heritage-rounded top; use to make the header stand out as a labeled band. */
+/* stylelint-disable-next-line no-descending-specificity */
+.table.accent-header table thead tr {
+  border: 0;
+}
+
+.table.accent-header table thead th {
+  background: var(--gradient-brand);
+  color: var(--color-parchment);
+}
+
+.table.accent-header table thead th:first-child {
+  border-top-left-radius: 12px;
+}
+
+.table.accent-header table thead th:last-child {
+  border-top-right-radius: 12px;
+}

@@ -1,0 +1,802 @@
+/*
+ * Copyright 2020 Adobe. All rights reserved.
+ * This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. You may obtain a copy
+ * of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ * OF ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
+/* ==========================================================================
+   Design tokens – use these variables across blocks for consistent styling.
+   ========================================================================== */
+
+:root,
+:host {
+  /* mobile-first breakpoints */
+  --bp-tablet: 600px;
+  --bp-desktop: 900px;
+  --bp-wide: 1200px;
+
+  /* grid — tight, near-full-bleed content gutter (~1.25% of viewport per side),
+     matching the source. The single --content-padding-inline token below is the
+     gutter every standard block inherits. */
+  --grid-container-width: 100%;
+  --grid-column-width: calc(var(--grid-container-width) / 12);
+  --grid-gutter-width: 1.25%;
+
+  /* spacing scale for consistent global layout */
+  --space-xs: 4px;
+  --space-s: 8px;
+  --space-m: 16px;
+  --space-l: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+
+  /* global layout rhythm — content gutter = ~1.25% of viewport per side */
+  --content-padding-inline: 1.25vw;
+  --main-block-space: var(--space-l);
+  --section-block-space: var(--space-l);
+
+  /* color scheme */
+  color-scheme: light dark;
+
+  /* ============================================================
+     Oura brand palette — Nordic wellness-tech retheme.
+     Warm near-black canvas, sand/cream light surface, brushed
+     titanium neutral, signature warm-amber primary accent paired
+     with a calm muted-teal secondary. Dark-first (mirrors the app).
+     ============================================================ */
+  --color-ink: #14110f;         /* warm near-black — canvas / dark surfaces / brand marks */
+  --color-obsidian: #14110f;    /* dark section background (alias of ink) */
+  --color-rust: #14110f;        /* primary/brand mark → warm near-black (legacy alias) */
+  --color-parchment: #f3ede3;   /* sand/cream light surface (bg-sand) */
+  --color-card-dark: #201b17;   /* matte raised card on the dark canvas */
+  --color-text-warm: #3a352f;   /* primary text/headline on light → warm near-black */
+  --color-gold: #d8a15c;        /* hover/accent → signature warm amber (legacy alias reused as accent) */
+  --color-rust-bright: #f3ede3; /* on-dark surface → cream */
+
+  /* signature accents */
+  --color-amber: #d8a15c;       /* primary accent — warm amber (CTAs, data rings, links) */
+  --color-amber-dark: #c08842;  /* amber hover (darkened ~12%) */
+  --color-teal: #3f8e8c;        /* secondary accent — calm muted teal */
+  --color-teal-dark: #347473;   /* teal hover */
+  --color-titanium: #c7c2ba;    /* brushed-titanium neutral (borders, hairlines, chrome) */
+
+  /* RGB channel tokens — the SAME brand hues as space-separated channels so blocks
+     can alpha-composite them, e.g. rgb(var(--rgb-amber) / 18%). Repointing these
+     retints every block border/shadow/tint site-wide (single chokepoint). */
+  --rgb-amber: 216 161 92;      /* = --color-amber #d8a15c */
+  --rgb-teal: 63 142 140;       /* = --color-teal #3f8e8c */
+  --rgb-ink: 20 17 15;          /* = --color-ink #14110f */
+  --rgb-parchment: 243 237 227; /* = --color-parchment #f3ede3 */
+
+  /* legacy Oura-blue aliases kept so existing selectors keep resolving —
+     now point at the amber accent so nothing renders blue. */
+  --color-oura-blue: var(--color-amber);
+  --color-oura-blue-dark: var(--color-amber-dark);
+
+  /* muted greys */
+  --color-muted: #a8a29a;          /* muted warm grey — for use ON DARK surfaces (footer, ink) */
+  --color-muted-on-light: #6a655e; /* AA-passing warm grey for muted text on cream (5.1:1) */
+
+  /* color tokens – grays and palette */
+  --color-gray-100: #f1f1f1;
+  --color-gray-200: #d3d3d3;
+  --color-gray-300: #b5b5b5;
+  --color-gray-400: #999;
+  --color-gray-500: #7d7d7d;
+  --color-gray-600: #636363;
+  --color-gray-700: #494949;
+  --color-gray-800: #313131;
+  --color-gray-900: #1b1b1b;
+  --color-green-100: #e1f5e3;
+  --color-green-200: #a3e1a8;
+  --color-green-300: #60cb6a;
+  --color-green-400: #24b032;
+  --color-green-500: #1e9029;
+  --color-green-600: #187220;
+  --color-teal-100: #e4f3f5;
+  --color-teal-200: #acdbdf;
+  --color-teal-300: #71c1c9;
+  --color-teal-400: #36a7b3;
+  --color-teal-500: #108a96;
+  --color-blue-100: #eaf2ff;
+  --color-blue-200: #b9d4ff;
+  --color-blue-300: #88b6ff;
+  --color-blue-400: #5898ff;
+  --color-blue-500: #2176ff;
+  --color-blue-600: #0058e4;
+  --color-blue-700: #0041a9;
+  --color-purple-100: #f4edfb;
+  --color-purple-200: #dfcbf2;
+  --color-purple-300: #c9a7ea;
+  --color-purple-400: #b385e1;
+  --color-purple-500: #9d60d8;
+  --color-purple-600: #843ccb;
+  --color-red-100: #ffecea;
+  --color-red-200: #ffc4be;
+  --color-red-300: #ff9990;
+  --color-red-400: #ff6759;
+  --color-red-500: #f81400;
+  --color-red-600: #c71000;
+  --color-orange-100: #ffeddc;
+  --color-orange-200: #ffc895;
+  --color-orange-300: #ff9e43;
+  --color-orange-400: #f37500;
+  --color-orange-500: #c76000;
+  --color-yellow-100: #fff48e;
+  --color-yellow-200: #ebd400;
+  --color-yellow-300: #cab600;
+
+  /* semantic / named colors */
+  --color-light: rgb(255 255 255);
+  --color-dark: rgb(0 0 0);
+  --color-text: light-dark(var(--color-text-warm), var(--color-parchment));
+  --color-text-muted: light-dark(var(--color-muted-on-light), var(--color-muted)); /* captions, eyebrows, copyright — AA on both schemes */
+  --color-link: light-dark(var(--color-text-warm), var(--color-parchment));
+  --color-link-hover: light-dark(var(--color-ink), var(--color-gold));
+  --color-brand: var(--color-ink);
+  --color-accent: var(--color-amber); /* warm amber — site-wide interactive accent */
+  --color-accent-hover: var(--color-amber-dark);
+  --color-accent-secondary: var(--color-teal); /* calm muted teal — secondary accent */
+  --color-shaded: light-dark(var(--color-parchment), var(--color-card-dark));
+
+  /* clean-named background alias (marketing cream in light, obsidian in dark) */
+  --color-bg: light-dark(var(--color-parchment), var(--color-obsidian));
+
+  /* fonts – Oura brand (self-hosted, licensed): AkkuratLL sans + Editorial New serif.
+     Fraunces/Inter kept as fallbacks for the swap window + unshipped weights. */
+  --font-family: akkuratll, inter, "Helvetica Neue", helvetica, arial, sans-serif;
+  --font-family-serif: "Editorial New", fraunces, georgia, serif;
+  --font-family-mono: "JetBrains Mono", "Courier New", monospace;
+  --body-font-family: var(--font-family);
+  --heading-font-family: var(--font-family-serif);
+
+  /* heading sizes – Oura scale (H1 72px display serif) */
+  --heading-font-size-xxl: 72px;
+  --heading-font-size-xl: 48px;
+  --heading-font-size-l: 32px;
+  --heading-font-size-m: 24px;
+  --heading-font-size-s: 20px;
+  --heading-font-size-xs: 18px;
+  --heading-font-size-xxs: 16px;
+
+  /* Oura display headings run tight: H1 121/110≈1.1, large displays 80/80=1.0 */
+  --heading-line-height: 1.05;
+
+  /* negative tracking on large serif/display headings (source H1 = -0.05em) */
+  --heading-letter-spacing: -0.04em;
+
+  /* uppercase eyebrow tracking (source = 0.9px/18px ≈ 0.05em, not 0.12em) */
+  --eyebrow-letter-spacing: 0.05em;
+
+  /* body sizes */
+  --body-font-size-xxxl: 25px;
+  --body-font-size-xxl: 22px;
+  --body-font-size-xl: 20px;
+  --body-font-size-l: 18px;
+  --body-font-size-m: 16px;
+  --body-font-size-s: 14px;
+  --body-font-size-xs: 12px;
+  --body-line-height: 1.6;
+
+  /* nav / layout */
+  --nav-height: 64px;
+  --header-height: var(--nav-height);
+
+  /* boilerplate compatibility – map to design tokens */
+  --background-color: var(--color-bg);
+  --light-color: var(--color-shaded);
+  --dark-color: var(--color-gray-500);
+  --text-color: var(--color-text);
+  --link-color: var(--color-link);
+  --link-hover-color: var(--color-link-hover);
+
+  /* hairline border — brushed titanium, scheme-aware */
+  --border-heritage: 1px solid light-dark(rgb(58 53 47 / 18%), rgb(199 194 186 / 18%));
+  --border-radius-heritage: 20px;
+
+  /* gradient and glow tokens — signature amber→teal / amber→warm-neutral */
+  --gradient-brand: linear-gradient(135deg, var(--color-amber) 0%, var(--color-teal) 100%);
+  --gradient-brand-dark: linear-gradient(135deg, var(--color-amber) 0%, var(--color-teal) 100%);
+  --gradient-cta: linear-gradient(135deg, var(--color-amber) 0%, var(--color-amber-dark) 55%, var(--color-teal) 140%);
+  --gradient-warm: linear-gradient(135deg, var(--color-amber) 0%, var(--color-titanium) 100%);
+  --shadow-glow-rust: 0 0 40px rgb(216 161 92 / 28%);
+  --shadow-glow-gold: 0 0 40px rgb(216 161 92 / 25%);
+  --shadow-glow-teal: 0 0 40px rgb(63 142 140 / 22%);
+  --grain-opacity: light-dark(0.02, 0.045); /* canvas grain — stronger on dark (brushed paper) */
+  --shadow-lift-m: 0 20px 40px -8px rgb(0 0 0 / 15%);
+  --shadow-lift-l: 0 30px 60px -12px rgb(0 0 0 / 22%);
+  --shadow-card: 0 2px 8px rgb(0 0 0 / 5%), 0 1px 2px rgb(0 0 0 / 7%);
+  --shadow-card-dark: 0 2px 12px rgb(0 0 0 / 45%), 0 1px 4px rgb(0 0 0 / 30%);
+
+  /* easing presets for consistent motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root[data-theme='light'],
+:host([data-theme='light']) {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'],
+:host([data-theme='dark']) {
+  color-scheme: dark;
+}
+
+@media (width >= 600px) {
+  :root,
+  :host {
+    --heading-font-size-xxl: 44px;
+    --heading-font-size-xl: 36px;
+    --main-block-space: var(--space-xl);
+    --section-block-space: var(--space-xl);
+  }
+}
+
+@media (width >= 900px) {
+  :root,
+  :host {
+    --body-font-size-m: 18px;
+    --body-font-size-s: 16px;
+    --body-font-size-xs: 14px;
+    --heading-font-size-xxl: 64px;
+    --heading-font-size-xl: 48px;
+    --heading-font-size-l: 32px;
+    --heading-font-size-m: 24px;
+    --heading-font-size-s: 20px;
+    --heading-font-size-xs: 18px;
+    --section-block-space: var(--space-3xl);
+  }
+}
+
+/* optional scheme classes for forced light/dark */
+.light-scheme {
+  color-scheme: light;
+}
+
+.dark-scheme {
+  color-scheme: dark;
+}
+
+/* theme aliases from page metadata (theme: dark / light) */
+body.light,
+body.theme-light {
+  color-scheme: light;
+}
+
+body.dark,
+body.theme-dark {
+  color-scheme: dark;
+}
+
+/* fallback fonts */
+@font-face {
+  font-family: roboto-condensed-fallback;
+  size-adjust: 88.82%;
+  src: local('Arial');
+}
+
+@font-face {
+  font-family: roboto-fallback;
+  size-adjust: 99.529%;
+  src: local('Arial');
+}
+
+/* ==========================================================================
+   Base layout and LCP-critical styles (boilerplate structure preserved)
+   ========================================================================== */
+
+html {
+  min-height: 100%;
+  scroll-padding-top: calc(var(--nav-height) + 1rem);
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: light-dark(rgb(var(--rgb-ink) / 15%), rgb(var(--rgb-parchment) / 25%));
+  color: inherit;
+}
+
+body {
+  display: none;
+  margin: 0;
+  box-sizing: border-box;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m);
+  line-height: var(--body-line-height);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Signature subtle grain over the canvas — matte, not glossy. A fixed,
+   very-low-opacity fractal-noise layer sits behind content; slightly stronger
+   on the dark scheme where it reads as brushed paper. Pure CSS, no asset. */
+body.appear::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: var(--grain-opacity);
+  mix-blend-mode: soft-light;
+}
+
+:root body {
+  min-height: 100vh;
+}
+
+body.appear {
+  display: block;
+}
+
+header {
+  height: var(--nav-height);
+}
+
+header .header,
+footer .footer {
+  visibility: hidden;
+}
+
+header .header[data-block-status="loaded"],
+footer .footer[data-block-status="loaded"] {
+  visibility: visible;
+}
+
+/* typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0.8em;
+  margin-bottom: 0.4em;
+  font-family: var(--heading-font-family);
+  font-weight: 300;
+  line-height: var(--heading-line-height);
+  scroll-margin: 40px;
+}
+
+/* Oura display headings (h1/h2/h3) use the light serif; small headings (h4-h6)
+   are the uppercase grotesque eyebrow style seen on the source. */
+h1 {
+  font-size: clamp(40px, 8vw, var(--heading-font-size-xxl));
+  letter-spacing: var(--heading-letter-spacing);
+}
+
+h2 {
+  font-size: clamp(32px, 5vw, var(--heading-font-size-xl));
+  letter-spacing: var(--heading-letter-spacing);
+}
+
+h3 {
+  font-size: var(--heading-font-size-m);
+  letter-spacing: -0.02em;
+}
+
+h4,
+h5,
+h6 {
+  font-family: var(--body-font-family);
+  font-weight: 600;
+  letter-spacing: var(--eyebrow-letter-spacing);
+  text-transform: uppercase;
+}
+
+h4 { font-size: var(--heading-font-size-xs); }
+h5 { font-size: var(--heading-font-size-xxs); }
+h6 { font-size: 14px; }
+
+@media (width >= 600px) {
+  h3 { font-size: var(--heading-font-size-l); }
+}
+
+
+p,
+dl,
+ol,
+ul,
+pre,
+blockquote {
+  margin-top: 0.8em;
+  margin-bottom: 0.25em;
+}
+
+main ul,
+main ol {
+  padding-inline-start: var(--space-l);
+}
+
+main ul ul,
+main ul ol,
+main ol ul,
+main ol ol {
+  padding-inline-start: var(--space-m);
+}
+
+code,
+pre {
+  font-family: var(--font-family-mono);
+  font-size: var(--body-font-size-s);
+}
+
+:not(pre) > code {
+  padding: 0.1em 0.35em;
+  background: rgb(var(--rgb-amber) / 10%);
+  border-radius: 4px;
+  color: var(--color-rust);
+}
+
+pre {
+  padding: var(--space-l);
+  border-radius: var(--space-s);
+  background-color: var(--light-color);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+strong {
+  font-weight: 600;
+}
+
+/* links */
+a:any-link {
+  color: var(--link-color);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: light-dark(rgb(26 26 26 / 30%), rgb(245 242 237 / 30%));
+  overflow-wrap: break-word;
+}
+
+a:hover {
+  color: var(--link-hover-color);
+  text-decoration: underline;
+  text-decoration-color: var(--link-hover-color);
+}
+
+/* buttons (AEM default content: links in standalone paragraphs) */
+p.button-container {
+  margin: var(--space-m) 0;
+}
+
+a.button:any-link,
+button.button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  max-width: 100%;
+  margin: 0;
+  border: 1px solid light-dark(var(--color-ink), var(--color-parchment));
+  border-radius: 999px;
+  padding: 14px 36px;
+  font: inherit;
+  font-weight: 500;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  background-color: light-dark(var(--color-ink), var(--color-parchment));
+  background-image: none;
+  color: light-dark(#fff, var(--color-ink));
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: all 0.4s;
+}
+
+a.button:any-link::after,
+button.button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgb(255 255 255 / 22%) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.55s ease;
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
+}
+
+/* Primary variant — signature amber→teal gradient CTA */
+a.button.primary:any-link,
+button.button.primary {
+  border-color: transparent;
+  background-color: var(--color-amber);
+  background-image: var(--gradient-cta);
+  color: #fff;
+}
+
+a.button:any-link:hover,
+a.button:any-link:focus-visible,
+button.button:hover,
+button.button:focus-visible {
+  background-color: light-dark(var(--color-gold), #fff);
+  border-color: light-dark(var(--color-gold), #fff);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px light-dark(rgb(var(--rgb-ink) / 22%), rgb(0 0 0 / 45%));
+  cursor: pointer;
+  text-decoration: none;
+}
+
+a.button:any-link:hover::after,
+a.button:any-link:focus-visible::after,
+button.button:hover::after,
+button.button:focus-visible::after {
+  transform: translateX(120%);
+}
+
+a.button.primary:hover,
+a.button.primary:focus-visible,
+button.button.primary:hover,
+button.button.primary:focus-visible {
+  border-color: transparent;
+  background-color: var(--color-amber-dark);
+  background-image: var(--gradient-cta);
+  color: #fff;
+  box-shadow: var(--shadow-glow-gold);
+}
+
+a.button:any-link:focus-visible,
+button.button:focus-visible {
+  outline: 2px solid var(--link-color);
+  outline-offset: 2px;
+}
+
+a.button[aria-disabled='true'],
+a.button[aria-disabled='true']:hover,
+a.button[aria-disabled='true']:focus-visible,
+button.button:disabled,
+button.button:disabled:hover,
+button.button:disabled:focus-visible {
+  background-color: var(--light-color);
+  border-color: var(--light-color);
+  color: var(--dark-color);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Secondary CTA carries the calm muted-teal accent — the counterpart to the
+   amber primary. Together they express the signature amber↔teal duality. */
+a.button.secondary,
+button.button.secondary {
+  border: 1.5px solid var(--color-accent-secondary);
+  background-color: transparent;
+  color: light-dark(var(--color-teal-dark), var(--color-teal));
+}
+
+a.button.secondary:hover,
+a.button.secondary:focus-visible,
+button.button.secondary:hover,
+button.button.secondary:focus-visible {
+  border-color: var(--color-accent-secondary);
+  background-color: light-dark(rgb(var(--rgb-teal) / 8%), rgb(var(--rgb-teal) / 14%));
+  color: light-dark(var(--color-teal-dark), var(--color-teal));
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px light-dark(rgb(var(--rgb-teal) / 18%), rgb(var(--rgb-teal) / 22%));
+}
+
+/* main content area – use design tokens for rhythm */
+main > div {
+  margin: var(--main-block-space) var(--content-padding-inline);
+}
+
+main img {
+  max-width: 100%;
+  width: auto;
+  height: auto;
+}
+
+.icon {
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+}
+
+.icon :is(img, svg) {
+  height: 100%;
+  width: 100%;
+}
+
+/* Global logo: adaptive color and consistent size everywhere */
+.icon.icon-logo {
+  width: 200px;
+  height: 45px;
+  color: light-dark(var(--color-rust), var(--color-rust-bright));
+}
+
+main .icon.icon-logo {
+  display: inline-block;
+  vertical-align: middle;
+  padding-right: 10px;
+  margin-bottom: 4px;
+}
+
+/* Reserve space for unsized images to reduce CLS */
+main img:not([width], [height]) {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+/* sections – boilerplate structure with design tokens */
+:is(main, article.article-body) > .section {
+  margin: inherit;
+  padding-block: var(--space-xl);
+}
+
+main > .section:first-child {
+  padding-block-start: 0;
+
+  /* Reduce CLS: contain layout so section appearance causes less reflow.
+     Exclude social-share section: contain creates a containing block for position:fixed,
+     which would break the sticky share buttons. */
+  contain: layout;
+}
+
+main > .section:has(.social-share) {
+  contain: none;
+}
+
+main > .section > div,
+article.article-body > .section > div {
+  max-width: var(--grid-container-width);
+  margin: auto;
+  padding: 0 var(--content-padding-inline);
+}
+
+/* section metadata */
+main .section.light,
+main .section.highlight {
+  background-color: var(--light-color);
+  margin: 0;
+  padding: var(--section-block-space) 0;
+}
+
+/* section-metadata style=divider: content-width (grid) border-bottom */
+:is(main, article.article-body) > .section.divider {
+  position: relative;
+}
+
+:is(main, article.article-body) > .section.divider::after {
+  content: '';
+  display: block;
+  max-width: var(--grid-container-width);
+  padding: 12px 0 24px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+:is(main, article.article-body) > .section.divider.center {
+    text-align: center;
+}
+
+/* section-metadata or block style: spacer utilities – add to section metadata or block styles for readability gaps */
+.spacer-top-s { margin-top: var(--space-s); }
+.spacer-top-m { margin-top: var(--space-m); }
+.spacer-top-l { margin-top: var(--space-l); }
+.spacer-bottom-s { margin-bottom: var(--space-s); }
+.spacer-bottom-m { margin-bottom: var(--space-m); }
+.spacer-bottom-l { margin-bottom: var(--space-l); }
+
+/* section-metadata style=rust: bold brand accent section */
+main > .section.rust {
+  background-color: var(--color-rust);
+  color: var(--color-parchment);
+  margin: 0;
+  padding: var(--space-3xl, var(--section-block-space)) 0;
+}
+
+main > .section.rust * {
+  color: var(--color-parchment);
+}
+
+main > .section.rust a:any-link {
+  color: var(--color-parchment);
+  text-decoration-color: rgb(245 242 237 / 40%);
+}
+
+/* section-metadata style=gradient: warm brand gradient full-bleed section */
+:is(main, article.article-body) > .section.gradient {
+  background: var(--gradient-brand);
+  color: var(--color-parchment);
+  margin: 0;
+  padding: var(--space-3xl, var(--section-block-space)) 0;
+}
+
+:is(main, article.article-body) > .section.gradient * {
+  color: var(--color-parchment);
+}
+
+:is(main, article.article-body) > .section.gradient a:any-link {
+  color: var(--color-parchment);
+  text-decoration-color: rgb(255 255 255 / 40%);
+}
+
+/* Shared button overrides for colored sections (rust, gradient) */
+:is(main, article.article-body) > .section.rust a.button:any-link,
+:is(main, article.article-body) > .section.rust button.button,
+:is(main, article.article-body) > .section.gradient a.button:any-link,
+:is(main, article.article-body) > .section.gradient button.button {
+  border-color: var(--color-parchment);
+  background-color: transparent;
+  background-image: none;
+  color: var(--color-parchment);
+  box-shadow: none;
+}
+
+:is(main, article.article-body) > .section.rust a.button:any-link:hover,
+:is(main, article.article-body) > .section.rust button.button:hover,
+:is(main, article.article-body) > .section.gradient a.button:any-link:hover,
+:is(main, article.article-body) > .section.gradient button.button:hover {
+  background-color: var(--color-parchment);
+  border-color: var(--color-parchment);
+  color: var(--color-rust);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 20%);
+}
+
+/* section-metadata style=ink: deep dark full-bleed section */
+:is(main, article.article-body) > .section.ink {
+  background-color: var(--color-ink);
+  color: var(--color-parchment);
+  margin: 0;
+  padding: var(--space-3xl, var(--section-block-space)) 0;
+}
+
+:is(main, article.article-body) > .section.ink * {
+  color: var(--color-parchment);
+}
+
+/* section-metadata style=warm: atmospheric warm tint with heritage diamond mesh */
+main > .section.warm {
+  background-color: light-dark(#f2ead8, #0e1812);
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      light-dark(rgb(var(--rgb-amber) / 4%), rgb(245 242 237 / 2%)) 0,
+      light-dark(rgb(var(--rgb-amber) / 4%), rgb(245 242 237 / 2%)) 1px,
+      transparent 1px,
+      transparent 12px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      light-dark(rgb(var(--rgb-amber) / 4%), rgb(245 242 237 / 2%)) 0,
+      light-dark(rgb(var(--rgb-amber) / 4%), rgb(245 242 237 / 2%)) 1px,
+      transparent 1px,
+      transparent 12px
+    );
+  margin: 0;
+  padding: var(--space-3xl, var(--section-block-space)) 0;
+}
+
+/* gradient-text utility: apply to any heading or span for brand gradient text */
+.gradient-text {
+  background: var(--gradient-brand);
+  background-clip: text;
+  color: transparent;
+}
+
+/* hide library metadata from being seen in block library */
+.library-metadata-wrapper {
+  display: none;
+}

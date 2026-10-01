@@ -1,0 +1,10 @@
+{
+  "type": "da",
+  "sites": {
+    "oura-ring": {
+      "libraryUrl": "https://main--sta-boilerplate--aemdemos.aem.page/tools/sidekick/library.json",
+      "previewOrg": "scdemos",
+      "previewSite": "oura-ring"
+    }
+  }
+}
